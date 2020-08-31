@@ -1,0 +1,286 @@
+---
+title: "Relatório sobre salários de TI"
+author: "José Lucas Albuquerque de Andrade"
+date: "30/08/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include=FALSE}
+#Com outliers
+funcionario = read.csv(file = 'FuncionariosTI.csv')
+#Separação Por Regiões
+source('functions.R')
+estados = filterRegion()
+```
+
+```{r, include=FALSE}
+#Sem outliers
+funcionario = read.csv(file = 'FuncionariosTI.csv')[5:162,]
+#Separação Por Regiões
+source('functions.R')
+estados = filterRegion()
+```
+
+## Introdução
+Para esse relatório foi usado os seguintes conceitos de estatística descritiva: média, mediana, quartil, moda e gráficos descritivos. Foi utilizada a base de dados FuncionariosTI disponibilizada pelo professor Rivanilson S. Rodrigues, com o objetivo de encontrar o máximo possivel de informações sobre a mesma, observando as seguintes colunas: UF, experiência profissional e tempo de empresa.
+
+## Análise
+
+  A partir da filtragem da região de cada desenvolvedor, encontra-se a seguinte proporção:
+
+<div style="text-align: center">
+
+```{r, include=TRUE, echo=FALSE}
+pie(
+  c(
+    nrow(estados[estados$Regiao == 'Norte', ]),
+    nrow(estados[estados$Regiao == 'Nordeste', ]),
+    nrow(estados[estados$Regiao == 'Centro-Oeste', ]),
+    nrow(estados[estados$Regiao == 'Sudeste', ]),
+    nrow(estados[estados$Regiao == 'Sul', ])
+  ),
+  labels = c('Norte', 'Nordeste', 'Centro-Oeste', 'Sudeste', 'Sul'),
+  col = rainbow(c(16, 21, 356, 98, 123))
+)
+```
+
+**Figura 1 - Porcentagem de funcionários por região.**
+
+</div>
+
+Sumário de dados dos salários por região :
+
+**Norte**
+
+```{r, include=TRUE, echo=FALSE}
+summary(estados[estados$Regiao == 'Norte', ]$Salario)
+print(paste('Variância: ', var(estados[estados$Regiao == 'Norte', ]$Salario)))
+print(paste('Desvio Padrão: ', sd(estados[estados$Regiao == 'Norte', ]$Salario)))
+```
+
+**Nordeste**
+
+```{r, include=TRUE, echo=FALSE}
+summary(estados[estados$Regiao == 'Nordeste', ]$Salario)
+print(paste('Variância: ', var(estados[estados$Regiao == 'Nordeste', ]$Salario)))
+print(paste('Variância Padrão: ', sd(estados[estados$Regiao == 'Nordeste', ]$Salario)))
+```
+
+**Centro-Oeste**
+
+```{r, include=TRUE, echo=FALSE}
+summary(estados[estados$Regiao == 'Centro-Oeste', ]$Salario)
+print(paste('Variância: ', var(estados[estados$Regiao == 'Centro-Oeste', ]$Salario)))
+print(paste('Variância Padrão: ', sd(estados[estados$Regiao == 'Centro-Oeste', ]$Salario)))
+```
+
+**Sudeste**
+
+```{r, include=TRUE, echo=FALSE}
+summary(estados[estados$Regiao == 'Sudeste', ]$Salario)
+print(paste('Variância: ', var(estados[estados$Regiao == 'Sudeste', ]$Salario)))
+print(paste('Variância Padrão: ', sd(estados[estados$Regiao == 'Sudeste', ]$Salario)))
+```
+
+**Sul**
+
+```{r, include=TRUE, echo=FALSE}
+summary(estados[estados$Regiao == 'Sul', ]$Salario)
+print(paste('Variância: ', var(estados[estados$Regiao == 'Sul', ]$Salario)))
+print(paste('Variância Padrão: ', sd(estados[estados$Regiao == 'Sul', ]$Salario)))
+```
+
+Com a base de dados também é possivel visualizar a moda, distribuição salarial e a frequência absoluta em cada estado:
+  
+<div style="text-align: center">
+
+```{r, include=TRUE, echo=FALSE}
+hist(estados[estados$Regiao == 'Norte', ]$Salario,
+     xlab = 'Salários',
+     col = 'purple',
+     main = 'Região Norte')
+```
+
+**Figura 2 - Salários da região norte e moda**
+
+```{r, include=TRUE, echo=FALSE}
+hist(estados[estados$Regiao == 'Nordeste', ]$Salario,
+     xlab = 'Salários',
+     col = 'yellow',
+     main = 'Região Nordeste')
+```
+
+**Figura 3 - Salários da região nordeste e moda**
+
+```{r, include=TRUE, echo=FALSE}
+hist(estados[estados$Regiao == 'Centro-Oeste', ]$Salario,
+     xlab = 'Salários',
+     col = 'lightgreen',
+     main = 'Região Centro-Oeste')
+```
+
+**Figura 4 - Salários da região centro-Oeste e moda**
+
+```{r, include=TRUE, echo=FALSE}
+hist(estados[estados$Regiao == 'Sudeste', ]$Salario,
+     xlab = 'Salários',
+     col = 'red',
+     main = 'Região Sudeste')
+```
+
+**Figura 5 - Salários da região sudeste e moda**
+
+```{r, include=TRUE, echo=FALSE}
+hist(estados[estados$Regiao == 'Sul', ]$Salario,
+     xlab = 'Salários',
+     col = 'lightblue',
+     main = 'Região Sul')
+```
+
+**Figura 6 - Salários da região sul e moda**
+
+</div>
+
+A seguir podemos ver a mediana dos salários a partir do tempo de empresa que seus colaboradores possuem, sendo que funcionários com mais de 6 anos foram omitidos, pois foram encontrados apenas 5 na região sudeste.
+
+<div style="text-align: center">
+
+```{r, include=TRUE, echo=FALSE}
+pie(
+  c(
+    median(estados[estados$Regiao == 'Norte' &
+                     estados$TempoDeEmpresa <= 3,]$Salario),
+    median(estados[estados$Regiao == 'Nordeste' &
+                     estados$TempoDeEmpresa <= 3,]$Salario),
+    median(estados[estados$Regiao == 'Centro-Oeste' &
+                     estados$TempoDeEmpresa <= 3,]$Salario),
+    median(estados[estados$Regiao == 'Sudeste' &
+                     estados$TempoDeEmpresa <= 3,]$Salario),
+    median(estados[estados$Regiao == 'Sul' &
+                     estados$TempoDeEmpresa <= 3,]$Salario)
+  ),
+  labels = c('Norte', 'Nordeste', 'Centro-Oeste', 'Sudeste', 'Sul'),
+  col = rainbow(c(16, 21, 356, 98, 123))
+)
+```
+
+**Figura 7 - Mediana salarial com até 3 anos de tempo de empresa**
+
+```{r, include=TRUE, echo=FALSE}
+pie(
+  c(
+    median(estados[estados$Regiao == 'Norte' &
+                     estados$TempoDeEmpresa > 3 &
+                     estados$TempoDeEmpresa <= 6,]$Salario),
+    median(estados[estados$Regiao == 'Nordeste' &
+                     estados$TempoDeEmpresa > 3 &
+                     estados$TempoDeEmpresa <= 6,]$Salario),
+    median(estados[estados$Regiao == 'Centro-Oeste' &
+                     estados$TempoDeEmpresa > 3 &
+                     estados$TempoDeEmpresa <= 6,]$Salario),
+    median(estados[estados$Regiao == 'Sudeste' &
+                     estados$TempoDeEmpresa > 3 &
+                     estados$TempoDeEmpresa <= 6,]$Salario),
+    median(estados[estados$Regiao == 'Sul' &
+                     estados$TempoDeEmpresa > 3 &
+                     estados$TempoDeEmpresa <= 6,]$Salario)
+  ),
+  labels = c('Norte', 'Nordeste', 'Centro-Oeste', 'Sudeste', 'Sul'),
+  col = rainbow(c(16, 21, 356, 98, 123))
+)
+```
+
+**Figura 8 - Mediana salarial de 3 até 6 anos de tempo de empresa**
+
+</div>
+
+E com o ultimo parâmetro temos os seguintes gráficos de acordo com a experiência profissional:
+
+<div style="text-align: center">
+```{r, include=TRUE, echo=FALSE}
+pie(
+  c(
+    median(estados[estados$Regiao == 'Nordeste' &
+                     estados$ExperienciaProfissional <= 5,]$Salario),
+    median(estados[estados$Regiao == 'Centro-Oeste' &
+                     estados$ExperienciaProfissional <= 5,]$Salario),
+    median(estados[estados$Regiao == 'Sudeste' &
+                     estados$ExperienciaProfissional <= 5,]$Salario),
+    median(estados[estados$Regiao == 'Sul' &
+                     estados$ExperienciaProfissional <= 5,]$Salario)
+  ),
+  labels = c('Nordeste', 'Centro-Oeste', 'Sudeste', 'Sul'),
+  col = rainbow(c(16, 21, 356, 98, 123))
+)
+```
+
+**Figura 9 - Mediana salarial de até 5 anos de experiência profissional**
+
+```{r, include=TRUE, echo=FALSE}
+pie(
+  c(
+    median(estados[estados$Regiao == 'Norte' &
+                     estados$ExperienciaProfissional > 5 &
+                     estados$ExperienciaProfissional <= 10,]$Salario),
+    median(estados[estados$Regiao == 'Nordeste' &
+                     estados$ExperienciaProfissional > 5 &
+                     estados$ExperienciaProfissional <= 10,]$Salario),
+    median(estados[estados$Regiao == 'Centro-Oeste' &
+                     estados$ExperienciaProfissional > 5 &
+                     estados$ExperienciaProfissional <= 10,]$Salario),
+    median(estados[estados$Regiao == 'Sudeste' &
+                     estados$ExperienciaProfissional > 5 &
+                     estados$ExperienciaProfissional <= 10,]$Salario),
+    median(estados[estados$Regiao == 'Sul' &
+                     estados$ExperienciaProfissional > 5 &
+                     estados$ExperienciaProfissional <= 10,]$Salario)
+  ),
+  labels = c('Norte', 'Nordeste', 'Centro-Oeste', 'Sudeste', 'Sul'),
+  col = rainbow(c(16, 21, 356, 98, 123))
+)
+```
+
+**Figura 10 - Mediana salarial de 5 até 10 anos de experiência profissional**
+
+```{r, include=TRUE, echo=FALSE}
+pie(
+  c(
+    median(estados[estados$Regiao == 'Norte' &
+                     estados$ExperienciaProfissional > 10 &
+                     estados$ExperienciaProfissional <= 15,]$Salario),
+    median(estados[estados$Regiao == 'Nordeste' &
+                     estados$ExperienciaProfissional > 10 &
+                     estados$ExperienciaProfissional <= 15,]$Salario),
+    median(estados[estados$Regiao == 'Centro-Oeste' &
+                     estados$ExperienciaProfissional > 10 &
+                     estados$ExperienciaProfissional <= 15,]$Salario),
+    median(estados[estados$Regiao == 'Sudeste' &
+                     estados$ExperienciaProfissional > 10 &
+                     estados$ExperienciaProfissional <= 15,]$Salario),
+    median(estados[estados$Regiao == 'Sul' &
+                     estados$ExperienciaProfissional > 10 &
+                     estados$ExperienciaProfissional <= 15,]$Salario)
+  ),
+  labels = c('Norte', 'Nordeste', 'Centro-Oeste', 'Sudeste', 'Sul'),
+  col = rainbow(c(16, 21, 356, 98, 123))
+)
+```
+
+**Figura 11 - Mediana salarial de 10 até 15 anos de experiência profissional**
+
+</div>
+
+## Conclusão
+  Após a análise na base de dados pode-se tirar as seguintes conclusões:
+  
+* A maioria dos funcionários é da região sudeste, seguido pelo nordeste.
+* A mediana apresenta uma melhor medida, exceto na região norte.
+* A uma grande variância padrão nos salários das regiões como constatado, sendo o mais aceitavel da região sul.
+* Todas as regiões apresenta uma moda salarial entre 2.000 e 5.000 reais, exceto na região norte.
+* Os estados sudeste e nordeste apresentam uma mediana salarial menor em comparado aos outros em até 3 anos de tempo de empresa.
+* Os estados norte e sul apresentam uma mediana salarial menor em comparado aos outros em até 6 anos de tempo de empresa.
+* Com de 5 até 10 anos de tempo de experiência os funcionários do centro-Oeste são mais bem pagos, seguidos pelo sudeste.
